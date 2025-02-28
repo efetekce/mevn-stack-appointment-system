@@ -6,4 +6,5 @@ export default defineNuxtConfig({
   mongoose: {
     uri: process.env.MONGO_URI,
   },
+  // ssr: false,
 });

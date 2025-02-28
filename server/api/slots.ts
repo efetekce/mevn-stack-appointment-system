@@ -26,11 +26,9 @@ export default defineEventHandler(async () => {
   }
 
   let available = temp.filter((slot) => {
-    return !appointments.some(
-      (a) => a.date === slot.date && a.time === slot.time
-    );
+    return !appointments.some((a) => a.date === slot.date && a.time === slot.time);
   });
 
-  console.log("available slots:", available);
+  // console.log("available slots:", available);
   return available;
 });
