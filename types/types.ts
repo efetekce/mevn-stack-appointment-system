@@ -1,10 +1,11 @@
 export interface GlobalState {
   name: string;
-  date: string;
-  time: string;
+  appointmentDate: string;
+  appointmentTime: string;
   slots: Slot[];
   appointments: Appointment[];
   isLoading: boolean;
+  showList: boolean;
 }
 export interface Slot {
   date: string;
@@ -16,3 +17,5 @@ export interface Appointment {
   date: string;
   time: string;
 }
+
+export type AppointmentData = Pick<Appointment, "name" | "time" | "date">;

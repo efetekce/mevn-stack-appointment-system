@@ -1,40 +1,43 @@
 <script setup lang="ts">
 import { z } from "zod";
 
-const { name, appointmentDate, appointmentTime, slots, filteredTimes, saveAppointment } =
-  useAppointment();
+const { state, filteredTimes, saveAppointment } = useAppointmentStore();
+
+// console.log(slots);
+
+// console.log(filteredTimes.value);
 const isLoading = ref(false);
 const formSchema = z.object({
   name: z.string().min(3, "Adınız en az 3 karakterden oluşmalıdır."),
-  appointmentDate: z.string().min(1, "Lütfen bir tarih seçin."),
-  appointmentTime: z.string().min(1, "Lütfen bir zaman aralığı seçin."),
+  date: z.string().min(1, "Lütfen bir tarih seçin."),
+  time: z.string().min(1, "Lütfen bir zaman aralığı seçin."),
 });
 
 type Errors = Record<keyof typeof formSchema.shape, string>;
 
 const errors = ref<Errors>({
   name: "",
-  appointmentDate: "",
-  appointmentTime: "",
+  date: "",
+  time: "",
 });
 
 const validateForm = async () => {
   const result = formSchema.safeParse({
-    name: name.value,
-    appointmentDate: appointmentDate.value,
-    appointmentTime: appointmentTime.value,
+    name: state.value.name,
+    date: state.value.appointmentDate,
+    time: state.value.appointmentTime,
   });
-
   if (!result.success) {
     errors.value = Object.fromEntries(
       result.error.errors.map((err) => [err.path[0], err.message])
     ) as Errors;
   } else {
     try {
+      isLoading.value = true;
       console.log("Valid form:", result.data);
       await new Promise((resolve) => setTimeout(resolve, 2000));
-      // await saveAppointment(result.data);
-      errors.value = { name: "", appointmentDate: "", appointmentTime: "" };
+      await saveAppointment(result.data);
+      errors.value = { name: "", date: "", time: "" };
     } catch (e) {
       console.log(e);
     } finally {
@@ -54,8 +57,11 @@ const validateForm = async () => {
 
 <template>
   <form @submit.prevent="validateForm">
+    <!-- {{ state.slots }} -->
     <div class="input-container">
-      <input v-model="name" class="input" placeholder="Adınız" />
+      <label for="name" class="block font-medium text-gray-700 text-sm">Adınız</label>
+
+      <input v-model="state.name" class="input" placeholder="Adınız" id="name" />
       <span v-if="errors.name" class="text-error">{{ errors.name }}</span>
     </div>
 
@@ -63,32 +69,35 @@ const validateForm = async () => {
       <label for="appointmentDate" class="block font-medium text-gray-700 text-sm"
         >Randevu Tarihi</label
       >
-      <select v-model="appointmentDate">
-        <option value="">Tarih Seçin</option>
-        <option v-for="slot in slots" :key="slot.date + slot.time" :value="slot.date">
+      <select v-model="state.appointmentDate" id="appointmentDate">
+        <option value="" disabled selected>Tarih Seçin</option>
+        <option v-for="slot in state.slots" :key="slot.date + slot.time" :value="slot.date">
           {{ slot.date }}
         </option>
       </select>
-      <span v-if="errors.appointmentDate" class="text-error">{{ errors.appointmentDate }}</span>
+      <span v-if="errors.date" class="text-error">{{ errors.date }}</span>
     </div>
 
     <div class="input-container">
-      <select v-model="appointmentTime">
-        <option value="">Saat Seçin</option>
+      <label for="appointmentTime" class="block font-medium text-gray-700 text-sm"
+        >Randevu Saati</label
+      >
+      <select v-model="state.appointmentTime" id="appointmentTime">
+        <option value="" disabled selected>Saat Seçin</option>
         <option v-for="slot in filteredTimes" :key="slot.time" :value="slot.time">
           {{ slot.time }}
         </option>
       </select>
-      <span v-if="errors.appointmentTime" class="text-error">{{ errors.appointmentTime }}</span>
+      <span v-if="errors.time" class="text-error">{{ errors.time }}</span>
     </div>
 
     <button :disabled="isLoading">
       <span v-if="isLoading"> Randevunuz Kaydediliyor... </span>
       <span v-else> Kaydet </span>
     </button>
-    <span v-if="errors.appointmentDate"
+    <!-- <span v-if="errors.appointmentDate"
       >Beklenmeyen bir hata oluştu. Kontrol edip tekrar deneyin.</span
-    >
+    > -->
   </form>
 </template>
 

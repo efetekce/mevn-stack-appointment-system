@@ -1,20 +1,21 @@
-import type { Appointment, GlobalState, Slot } from "~/types/types";
+import type { Appointment, AppointmentData, GlobalState, Slot } from "~/types/types";
 
-export const useAppointment = () => {
+export const useAppointmentStore = () => {
   const state = useState<GlobalState>("data", () => ({
     name: "",
-    date: "",
-    time: "",
+    appointmentDate: "",
+    appointmentTime: "",
     slots: [],
     appointments: [],
     isLoading: false,
+    showList: false,
   }));
 
   const filteredTimes = computed(() => {
-    if (!state.value.date) return [];
-    const temp = state.value.slots.filter((slot) => slot.date === data.value.date);
-    console.log("filtered times:", temp);
-    return temp;
+    if (!state.value.appointmentDate) return [];
+    const timeSlots = state.value.slots.filter((slot) => slot.date === state.value.appointmentDate);
+    console.log("filtered times:", timeSlots);
+    return timeSlots;
   });
 
   const fetchAppointments = async () => {
@@ -44,34 +45,35 @@ export const useAppointment = () => {
       console.log(e);
     } finally {
       state.value.isLoading = false;
+      console.log(state.value.slots);
     }
   };
 
-  const saveAppointment = async () => {
+  const saveAppointment = async (formData: AppointmentData) => {
     const response = await $fetch("/api/appointments", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        name: name,
-        date: date,
-        time: time,
+        name: formData.name,
+        date: formData.date,
+        time: formData.time,
       }),
     });
-    const savedData = await response.json();
-    console.log("save response:", savedData);
-    // refreshNuxtData();
-    // location.reload();
+
+    console.log("save response:", response);
+    await fetchSlots();
   };
 
   return {
-    name: computed(() => state.value.name),
-    appointmentDate: computed(() => state.value.date),
-    appointmentTime: computed(() => state.value.time),
-    appointments: computed(() => state.value.appointments),
-    slots: computed(() => state.value.slots),
-    isLoading: computed(() => state.value.isLoading),
+    // name: state.value.name,
+    // appointmentDate: state.value.date,
+    // appointmentTime: state.value.time,
+    // appointments: state.value.appointments,
+    // slots: state.value.slots,
+    // isLoading: state.value.isLoading,
+    state,
     fetchSlots,
     fetchAppointments,
     filteredTimes,

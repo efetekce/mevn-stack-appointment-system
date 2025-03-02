@@ -1,37 +1,38 @@
 <script setup lang="ts">
-const { isLoading, appointments, slots, fetchAppointments, fetchSlots } = useAppointment();
-// const { appointments, isLoading, slots } = data.value;
+const { fetchAppointments, fetchSlots, state } = useAppointmentStore();
+// console.log(slots);
 let interval: ReturnType<typeof setInterval>;
-onMounted(async () => {
-  // await Promise.all([fetchAppointments(), fetchSlots()]);
-  await fetchSlots();
-  await fetchAppointments();
 
-  // if (isLoading) await new Promise((resolve) => setTimeout(resolve, 2000));
-  interval = setInterval(async () => {
-    console.log("polling", "loading:", isLoading.value);
-    if (!isLoading.value) {
-      console.log("fetching.");
-      await Promise.all([fetchAppointments(), fetchSlots()]);
-      // await new Promise((resolve) => setTimeout(resolve, 2000));
-    } else {
-      console.log("skipping.");
-    }
-    console.log("loading", isLoading.value);
-  }, 300000);
+onMounted(async () => {
+  await fetchSlots();
+  fetchAppointments();
+
+  // interval = setInterval(async () => {
+  //   console.log("polling", "loading:", isLoading.value);
+  //   if (!isLoading.value) {
+  //     console.log("fetching.");
+  //     await fetchSlots();
+  //   } else {
+  //     console.log("skipping.");
+  //   }
+  //   console.log("loading", isLoading.value);
+  // }, 3000);
 });
-onUnmounted(() => clearInterval(interval));
+
+// onUnmounted(() => clearInterval(interval));
 </script>
 
 <template>
   <div class="wrapper">
     <div class="content">
-      <div v-show="isLoading" class="text-center">Loading.</div>
+      <div v-show="state.isLoading" class="text-center">Loading.</div>
 
       <h1>Randevu Sistemi</h1>
       <AppointmentForm />
 
-      <!-- <AppointmentList /> -->
+      <div v-if="state.showList">
+        <AppointmentList />
+      </div>
     </div>
   </div>
 </template>
