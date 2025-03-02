@@ -1,7 +1,7 @@
 import type { Appointment, GlobalState, Slot } from "~/types/types";
 
 export const useAppointment = () => {
-  const data = useState<GlobalState>("data", () => ({
+  const state = useState<GlobalState>("data", () => ({
     name: "",
     date: "",
     time: "",
@@ -10,52 +10,44 @@ export const useAppointment = () => {
     isLoading: false,
   }));
 
-  //   const {
-  //     name: userName,
-  //     date: appointmentDate,
-  //     time: appointmentTime,
-  //     slots,
-  //     appointments,
-  //   } = toRefs(data.value);
-
   const filteredTimes = computed(() => {
-    if (!data.value.date) return [];
-    const temp = data.value.slots.filter((slot) => slot.date === data.value.date);
+    if (!state.value.date) return [];
+    const temp = state.value.slots.filter((slot) => slot.date === data.value.date);
     console.log("filtered times:", temp);
     return temp;
   });
 
-  const fetchData = async () => {
-    if (data.value.isLoading) return;
-    data.value.isLoading = true;
+  const fetchAppointments = async () => {
+    if (state.value.isLoading) return;
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      state.value.isLoading = true;
+      // await new Promise((resolve) => setTimeout(resolve, 1000));
       const appointmentData = await $fetch<Appointment[]>("/api/appointments");
-      data.value.appointments = appointmentData;
-      console.log("appointments:", data.value.appointments);
+      state.value.appointments = appointmentData;
+      console.log("appointments:", state.value.appointments);
     } catch (error) {
       console.log(error);
     } finally {
-      data.value.isLoading = false;
+      state.value.isLoading = false;
     }
   };
 
   const fetchSlots = async () => {
-    if (data.value.isLoading) return;
-    data.value.isLoading = true;
+    if (state.value.isLoading) return;
     try {
+      state.value.isLoading = true;
       await new Promise((resolve) => setTimeout(resolve, 1000));
       const slotData = await $fetch<Slot[]>("/api/slots");
-      data.value.slots = slotData;
-      console.log(data.value.slots);
+      state.value.slots = slotData;
+      console.log(state.value.slots);
     } catch (e) {
       console.log(e);
     } finally {
-      data.value.isLoading = false;
+      state.value.isLoading = false;
     }
   };
 
-  const save = async () => {
+  const saveAppointment = async () => {
     const response = await $fetch("/api/appointments", {
       method: "POST",
       headers: {
@@ -74,9 +66,15 @@ export const useAppointment = () => {
   };
 
   return {
-    ...toRefs(data.value),
+    name: computed(() => state.value.name),
+    appointmentDate: computed(() => state.value.date),
+    appointmentTime: computed(() => state.value.time),
+    appointments: computed(() => state.value.appointments),
+    slots: computed(() => state.value.slots),
+    isLoading: computed(() => state.value.isLoading),
     fetchSlots,
-    fetchData,
+    fetchAppointments,
     filteredTimes,
+    saveAppointment,
   };
 };
