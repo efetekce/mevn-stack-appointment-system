@@ -37,7 +37,7 @@ export const useAppointmentStore = () => {
     if (state.value.isLoading) return;
     try {
       state.value.isLoading = true;
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      // await new Promise((resolve) => setTimeout(resolve, 1000));
       const slotData = await $fetch<Slot[]>("/api/slots");
       state.value.slots = slotData;
       console.log(state.value.slots);

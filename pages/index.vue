@@ -5,7 +5,7 @@ let interval: ReturnType<typeof setInterval>;
 
 onMounted(async () => {
   await fetchSlots();
-  fetchAppointments();
+  await fetchAppointments();
 
   // interval = setInterval(async () => {
   //   console.log("polling", "loading:", isLoading.value);
