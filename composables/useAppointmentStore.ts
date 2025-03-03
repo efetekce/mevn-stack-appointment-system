@@ -63,16 +63,14 @@ export const useAppointmentStore = () => {
     });
 
     console.log("save response:", response);
+    state.value.name = "";
+    state.value.appointmentDate = "";
+    state.value.appointmentTime = "";
     await fetchSlots();
+    state.value.showList = true;
   };
 
   return {
-    // name: state.value.name,
-    // appointmentDate: state.value.date,
-    // appointmentTime: state.value.time,
-    // appointments: state.value.appointments,
-    // slots: state.value.slots,
-    // isLoading: state.value.isLoading,
     state,
     fetchSlots,
     fetchAppointments,

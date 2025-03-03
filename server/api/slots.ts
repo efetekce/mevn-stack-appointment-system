@@ -2,7 +2,7 @@ import connectDB from "../db/db";
 import Appointment from "../models/Appointment";
 
 export default defineEventHandler(async () => {
-  await connectDB();
+  // await connectDB();
   const appointments = await Appointment.find({}, "date time");
 
   let temp = [];
@@ -25,10 +25,22 @@ export default defineEventHandler(async () => {
     }
   }
 
-  let available = temp.filter((slot) => {
+  // const uniqueDates = [...new Set(temp.map((slot) => slot.date))];
+  const available = temp.filter((slot) => {
     return !appointments.some((a) => a.date === slot.date && a.time === slot.time);
   });
 
+  // const available = temp.reduce<string[]>((acc, slot) => {
+  //   if (
+  //     !appointments.some((a) => a.date === slot.date && a.time === slot.time) &&
+  //     !acc.includes(slot.date)
+  //   ) {
+  //     acc.push(slot.date);
+  //   }
+  //   return acc;
+  // }, []);
+
   // console.log("available slots:", available);
+  // console.log(uniqueDates);
   return available;
 });

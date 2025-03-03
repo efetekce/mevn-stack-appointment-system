@@ -7,4 +7,7 @@ export default defineNuxtConfig({
     uri: process.env.MONGO_URI,
   },
   // ssr: false,
+  nitro: {
+    preset: "netlify",
+  },
 });

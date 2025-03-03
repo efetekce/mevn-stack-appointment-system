@@ -1,10 +1,11 @@
 <script setup lang="ts">
-const loading = ref(false);
+const { state } = useAppointmentStore();
 </script>
 
 <template>
   <!-- Bad practice: No pagination or filtering -->
   <div
+    class="absolute inset-0 size-120"
     style="
       max-width: 600px;
       margin: 20px auto;
@@ -15,9 +16,9 @@ const loading = ref(false);
     "
   >
     <h2 style="margin-bottom: 20px">Mevcut Randevular</h2>
-    <div>{{ appointments }},{{ slots }}</div>
+    <!-- <div>{{ state.appointments }},{{ state.slots }}</div> -->
     <div
-      v-for="appointment in appointments"
+      v-for="appointment in state.appointments"
       :key="appointment.id"
       style="padding: 10px; border-bottom: 1px solid #ddd"
     >
