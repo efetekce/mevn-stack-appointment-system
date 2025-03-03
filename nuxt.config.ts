@@ -8,7 +8,7 @@ export default defineNuxtConfig({
   },
   // ssr: false,
   nitro: {
-    preset: "netlify",
+    // preset: "netlify",
     routeRules: {
       "/api/**": { cors: true },
     },
@@ -16,5 +16,6 @@ export default defineNuxtConfig({
   routeRules: {
     "/api/**": { cors: true },
   },
+
   // css: ["~/assets/app.css"],
 });
