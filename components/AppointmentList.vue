@@ -1,11 +1,15 @@
 <script setup lang="ts">
 const { state } = useAppointmentStore();
+
+onMounted(() => {
+  // setTimeout(() => (state.value.showList = false), 10000);
+});
 </script>
 
 <template>
   <!-- Bad practice: No pagination or filtering -->
   <div
-    class="absolute inset-0 size-120"
+    class="flex flex-col justify-between items-center fixed inset-0 mx-auto overflow-y-auto"
     style="
       max-width: 600px;
       margin: 20px auto;
@@ -16,11 +20,12 @@ const { state } = useAppointmentStore();
     "
   >
     <h2 style="margin-bottom: 20px">Mevcut Randevular</h2>
-    <!-- <div>{{ state.appointments }},{{ state.slots }}</div> -->
+    <button class="top-4 right-4 absolute" @click="state.showList = false">X</button>
     <div
       v-for="appointment in state.appointments"
       :key="appointment.id"
       style="padding: 10px; border-bottom: 1px solid #ddd"
+      class="w-full text-center"
     >
       {{ appointment.name }} - {{ appointment.date }} {{ appointment.time }}
     </div>

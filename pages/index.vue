@@ -25,10 +25,12 @@ onMounted(async () => {
 <template>
   <div class="wrapper">
     <div class="content">
-      <div v-show="state.isLoading" class="text-center">Loading.</div>
-
       <h1>Randevu Sistemi</h1>
       <AppointmentForm />
+
+      <div v-if="state.isLoading">
+        <Loader />
+      </div>
 
       <div v-if="state.showList">
         <AppointmentList />
