@@ -4,7 +4,8 @@ import Slot from "../models/Slot";
 
 export default defineEventHandler(async () => {
   await connectDB();
-  const appointments = await Appointment.find({}, "date time");
+  // const appointments = await Appointment.find({}, "date time");
+  const appointments = await Slot.find({});
 
   let temp = [];
   for (let i = 28; i <= 29; i++) {
@@ -45,7 +46,7 @@ export default defineEventHandler(async () => {
   // console.log(uniqueDates);
   try {
     await Slot.deleteMany({});
-    Slot.insertMany(availableSlots);
+    await Slot.insertMany(availableSlots);
   } catch (error) {
     console.log(error);
   }

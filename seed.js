@@ -1,5 +1,7 @@
-import Slot from "../server/models/Slot";
+import Slot from "./server/models/Slot.js";
+import mongoose from "mongoose";
 
+const uri = process.env.MONGO_URI;
 const seedSlots = async () => {
   let temp = [];
   for (let i = 28; i <= 29; i++) {
@@ -22,6 +24,9 @@ const seedSlots = async () => {
   }
 
   try {
+    await mongoose.connect(uri, {
+      serverSelectionTimeoutMS: 30000,
+    });
     await Slot.deleteMany();
     await Slot.insertMany(temp);
     console.log("Slots seeded successfully!");
