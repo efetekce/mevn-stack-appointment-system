@@ -5,10 +5,11 @@ export default defineNuxtConfig({
   modules: ["@nuxtjs/tailwindcss", "nuxt-mongoose"],
   mongoose: {
     uri: process.env.MONGO_URI,
+    modelsDir: "models",
+    devtools: true,
   },
-  // ssr: false,
+
   nitro: {
-    // preset: "netlify",
     routeRules: {
       "/api/**": { cors: true },
     },
