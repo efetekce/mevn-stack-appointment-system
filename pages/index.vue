@@ -26,14 +26,13 @@ onMounted(async () => {
   <div class="wrapper">
     <div class="content">
       <h1>Randevu Sistemi</h1>
-      <AppointmentForm />
+      <div v-if="!state.showList">
+        <AppointmentForm />
+      </div>
+      <AppointmentList v-else />
 
       <div v-if="state.isLoading">
         <Loader />
-      </div>
-
-      <div v-if="state.showList">
-        <AppointmentList />
       </div>
     </div>
   </div>
@@ -41,10 +40,15 @@ onMounted(async () => {
 
 <style scoped>
 .wrapper {
-  @apply bg-[url(/calendar.svg)] relative min-h-screen bg-no-repeat bg-contain opacity-100 bg-center;
+  @apply relative min-h-screen;
+}
+.wrapper::before {
+  content: "";
+  @apply bg-[url(/calendar.svg)] bg-no-repeat bg-center bg-contain opacity-40 absolute inset-0;
+  z-index: -1;
 }
 .content {
-  @apply opacity-100 grid content-center gap-8 absolute inset-0;
+  @apply opacity-90 grid content-center gap-8 absolute inset-0;
 }
 h1 {
   @apply font-bold text-4xl text-center;

@@ -10,11 +10,11 @@ export default defineNuxtConfig({
   nitro: {
     preset: "netlify",
     routeRules: {
-      "/api/**": { cors: false },
+      "/api/**": { cors: true },
     },
   },
   routeRules: {
-    "/api/**": { cors: false },
+    "/api/**": { cors: true },
   },
   // css: ["~/assets/app.css"],
 });
