@@ -9,7 +9,7 @@ onMounted(() => {
 <template>
   <!-- Bad practice: No pagination or filtering -->
   <div
-    class="flex flex-col justify-between items-center fixed inset-0 mx-auto overflow-y-auto"
+    class="flex flex-col items-center fixed inset-80 overflow-y-auto"
     style="
       max-width: 600px;
       margin: 20px auto;
