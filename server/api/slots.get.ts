@@ -4,7 +4,7 @@ import Slot from "../models/Slot";
 
 export default defineEventHandler(async () => {
   await connectDB();
-  const appointments = await Slot.find();
+  const appointments = await Appointment.find({}, "date time");
 
   let temp = [];
   for (let i = 28; i <= 29; i++) {
@@ -27,7 +27,7 @@ export default defineEventHandler(async () => {
   }
 
   // const uniqueDates = [...new Set(temp.map((slot) => slot.date))];
-  const available = temp.filter((slot) => {
+  const availableSlots = temp.filter((slot) => {
     return !appointments.some((a) => a.date === slot.date && a.time === slot.time);
   });
 
@@ -44,9 +44,10 @@ export default defineEventHandler(async () => {
   // console.log("available slots:", available);
   // console.log(uniqueDates);
   try {
-    Slot.insertMany(appointments);
+    await Slot.deleteMany({});
+    Slot.insertMany(availableSlots);
   } catch (error) {
     console.log(error);
   }
-  return available;
+  return availableSlots;
 });
