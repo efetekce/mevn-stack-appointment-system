@@ -3,7 +3,7 @@ import Appointment from "../models/Appointment";
 import Slot from "../models/Slot";
 
 export default defineEventHandler(async () => {
-  // await connectDB();
+  await connectDB();
   // const appointments = await Appointment.find({}, "date time");
   const appointments = await Slot.find({});
 
