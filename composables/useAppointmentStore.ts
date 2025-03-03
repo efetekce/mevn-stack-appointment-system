@@ -66,7 +66,7 @@ export const useAppointmentStore = () => {
     state.value.name = "";
     state.value.appointmentDate = "";
     state.value.appointmentTime = "";
-    await fetchSlots();
+    await fetchAppointments();
     state.value.showList = true;
   };
 
